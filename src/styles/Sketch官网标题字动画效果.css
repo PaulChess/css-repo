@@ -1,0 +1,55 @@
+:root {
+  font-size: 32px;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Helvetica;
+  background: linear-gradient(135deg,#f66,#f90,#3c9,#09f,#66f) 0 0/100% 100%;
+  overflow: hidden;
+}
+#container {
+  width: 600px;
+}
+h1 {
+  margin: 0;
+  letter-spacing: -2px;
+  color:#fff;
+}
+h1 span {
+  position: relative;
+  top: 0.8rem;
+  /* 0.3s是一个span完成向上滑动所花的时间 */
+  animation: 0.3s flow-up ease-in-out forwards;
+}
+h1 span i {
+  position: relative;
+  top: 2rem;
+  animation: flow-up .5s ease-in-out forwards;
+  animation-delay: calc(var(--i) * 0.1s);
+}
+p {
+  color: #666;
+  /* line-height: 32 * 1.3 */
+  line-height: 1.3rem;
+  opacity: 0;
+  position: relative;
+  top: 0.8rem;
+  animation: 0.5s flow-up ease-out forwards, 0.5s fade-in ease-out forwards;
+  animation-delay: 0.8s;
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes flow-up {
+  to {
+    top: 0;
+  }
+}

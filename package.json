@@ -1,0 +1,24 @@
+{
+  "name": "css-repo",
+  "version": "1.0.0",
+  "description": "css collection",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulChess/css-repo.git"
+  },
+  "keywords": [
+    "css",
+    "animation",
+    "cool"
+  ],
+  "author": "shenjiaqi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaulChess/css-repo/issues"
+  },
+  "homepage": "https://github.com/PaulChess/css-repo#readme"
+}
