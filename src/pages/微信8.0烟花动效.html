@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>微信8.0烟花动效</title>
+  <link rel="stylesheet" href="../styles/微信8.0烟花动效.css">
+</head>
+
+<body>
+  <button id="start">发射烟花</button>
+  <canvas id="confetti"></canvas>
+</body>
+
+<script>
+  function setCanvasSize(canvas, width, height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
+
+  function toDecimal(str) {
+    return parseInt(str, 16);
+  }
+
+  function hexToRgb(str) {
+    var val = String(str).replace(/[^0-9a-f]/gi, '');
+    if (val.length < 6) {
+      val = val[0] + val[0] + val[1] + val[1] + val[2] + val[2];
+    }
+
+    return {
+      r: toDecimal(val.substring(0, 2)),
+      g: toDecimal(val.substring(2, 4)),
+      b: toDecimal(val.substring(4, 6))
+    };
+  }
+
+  // 封装动画调用函数
+  var raf = (function () {
+    var TIME = Math.floor(1000 / 60);
+    var frame, cancel;
+    var frames = {};
+    var lastFrameTime = 0;
+
+    if (typeof requestAnimationFrame === 'function' && typeof cancelAnimationFrame === 'function') {
+      frame = function(cb) {
+        var id = Math.random();
+        // requestAnimationFrame返回参数：整数依次+1
+        // time: 页面运行到现在所经过的ms数
+        // 保证执行间隔在TIME ms以上
+        frames[id] = requestAnimationFrame(function obFrame(time) {
+          // 这个条件请熟记
+          if (lastFrameTime === time || Math.floor(lastFrameTime + TIME) < time) {
+            lastFrameTime = time;
+            delete frames[id];
+            cb();
+          } else {
+            frames[id] = requestAnimationFrame(onFrame);
+          }
+        })
+      }
+    } else {
+      frame = function(cb) {
+        // 这里是否return都可以
+        return setTimeout(cb, TIME);
+      };
+      cancel = function(timer) {
+        return clearTimeout(timer);
+      };
+    }
+
+    return {
+      frame: frame,
+      cancel: cancel
+    }
+  }());
+</script>
+<script>
+  const colors = [
+    '#26ccff',
+    '#a25afd',
+    '#ff5e7e',
+    '#88ff5a',
+    '#fcff42',
+    '#ffa62d',
+    '#ff36ff'
+  ];
+
+  // 配置项
+  const confettiOptions = {
+    "x": 445,
+    "y": 541,
+    "angle2D": 3 / 2 * Math.PI + 1 / 6 * Math.PI,
+    "gravity": 3,
+    "velocity": 50
+  }
+
+  var point1 = {
+    x: 0,
+    y: 0
+  };
+  var point2 = {
+    x: 20,
+    y: 0
+  };
+  var point3 = {
+    x: 20,
+    y: 20
+  };
+  var point4 = {
+    x: 0,
+    y: 20
+  };
+
+  window.onload = function () {
+    const confetti = document.querySelector("#confetti");
+    const start = document.querySelector("#start");
+    setCanvasSize(confetti, document.documentElement.clientWidth, document.documentElement.clientHeight);
+    const context = confetti.getContext("2d");
+    context.clearRect(0, 0, confetti.width, confetti.height);
+    context.fillStyle = 'rgba(2, 255, 255, 1)';
+    context.beginPath();
+    context.moveTo(point1.x, point1.y);
+    context.lineTo(point2.x, point2.y);
+    context.lineTo(point3.x, point3.y);
+    context.lineTo(point4.x, point4.y);
+    context.closePath();
+    context.fill();
+
+    var animationFrame = null;
+
+    var arr = []
+    for (let i = 0; i < 20; i++) {
+      arr.push({
+        "x": 445,
+        "y": 541,
+        "velocity": (45 * 0.5) + (Math.random() * 20),
+        "angle2D": 3 / 2 * Math.PI + Math.random() * 1 / 4 * Math.PI,
+        "tiltAngle": Math.random() * Math.PI,
+        "color": hexToRgb(colors[Math.floor(Math.random() * 7)]),
+        "tick": 0,
+        "totalTicks": 200,
+        "decay": 0.9,
+        "random": 0,
+        "tiltSin": 0,
+        "tiltCos": 0,
+        "gravity": 3,
+        "scalar": 1
+      })
+    }
+    start.onclick = function () {
+      for (let i = 0; i < 2000; i+=2) {
+        raf.frame(() => {
+          console.log(i)
+        })
+      }
+    }
+  }
+</script>
+
+</html>
