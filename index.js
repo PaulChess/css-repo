@@ -59,6 +59,7 @@ function hexToRgb(str) {
   };
 }
 
+// 控制单个例子运动
 function updateFetti(context, fetti) {
   var progress = (fetti.tick++) / fetti.totalTicks;
   if (progress > 1) {
